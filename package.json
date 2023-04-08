@@ -1,0 +1,14 @@
+{
+  "name": "vue-di",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {},
+  "keywords": [],
+  "author": "ky2312",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18",
+    "pnpm": ">=7"
+  }
+}
