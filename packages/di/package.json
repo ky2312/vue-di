@@ -1,0 +1,38 @@
+{
+  "name": "di",
+  "version": "1.0.0",
+  "description": "适用于Vue.js的的依赖注入库。",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "types": "./dist/index.d.ts",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.umd.js"
+    }
+  },
+  "scripts": {
+    "dev": "tsc -p ./tsconfig.json --watch",
+    "test": "pnpm run lib && mocha",
+    "build": "tsc -p ./tsconfig.json",
+    "lib": "vite build && pnpm run lib:type",
+    "lib:type": "node ./build/types.cjs"
+  },
+  "keywords": ["IoC", "DI"],
+  "author": "ky2312",
+  "license": "MIT",
+  "dependencies": {
+    "awilix": "^8.0.1"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.1",
+    "mocha": "^10.2.0",
+    "ts-morph": "^18.0.0",
+    "typescript": "~4.7.4",
+    "vite": "^3.0.2"
+  }
+}
