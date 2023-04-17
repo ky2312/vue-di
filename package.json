@@ -1,7 +1,7 @@
 {
   "name": "vue-di",
   "version": "1.0.0",
-  "description": "",
+  "description": "适用于Vue.js的的依赖注入库。",
   "private": true,
   "scripts": {
     "vue2:dev": "pnpm --filter vue2 run dev",
