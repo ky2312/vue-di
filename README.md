@@ -21,7 +21,7 @@ export class UserModel {
     name: 'user1',
     age: 10,
   }
-  get username() {return this._user.name}
+  get name() {return this._user.name}
   get age() {return this._user.age}
   setName(name: string) {
     this._user.name = name
@@ -84,6 +84,7 @@ export default defineComponent({
   methods: {
     setUsername() {
       this.userService.setUsername(this.usernameBuf)
+      this.usernameBuf = ''
     }
   },
 })

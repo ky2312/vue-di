@@ -6,6 +6,7 @@
   "scripts": {
     "vue2:dev": "pnpm --filter vue2 run dev",
     "vue2:build": "pnpm --filter vue2 run build",
+    "vue3:dev": "pnpm --filter vue3 run dev",
     "di:dev": "pnpm --filter di run dev",
     "di:test": "pnpm --filter di run test",
     "di:lib": "pnpm --filter di run lib"
