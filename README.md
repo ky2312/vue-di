@@ -2,11 +2,13 @@
 
 /packages/vue2 为vue2示例
 
+/packages/vue3 为vue3示例
+
 ## 如何使用
 
-具体请参照 /packages/vue2 内的示例代码。
-
 ### 全局
+
+具体请参照 /packages/vue2 或 /packages/vue3 内的示例代码。
 
 ```ts
 // UserModel.ts
