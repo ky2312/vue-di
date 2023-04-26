@@ -27,7 +27,7 @@ export default defineComponent({
   created() {
   },
   beforeDestroy() {
-    this.todoController?.dispose()
+    this.todoController.dispose()
   },
   methods: {
     addNewTodo() {
