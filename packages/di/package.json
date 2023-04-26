@@ -1,6 +1,6 @@
 {
   "name": "di",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "适用于Vue.js的的依赖注入库。",
   "type": "module",
   "files": [

@@ -8,7 +8,6 @@ import {
 import type {
   Dependencies, 
   RegisterDependenciesOptions,
-  BuildEntry,
   DependencyName,
   Dependency,
   IDisposable,
@@ -28,19 +27,19 @@ interface RegisterData {
 }
 
 /** 创建代理类 */
-function createProxyClass(name: DependencyName, classes: Dependency, registerDependencies: DependencyName[]) {
+function createProxyClass<T extends Dependency<any>>(name: DependencyName, classes: T, registerDependencies: DependencyName[]): T & Constructor<IProxyClass> {
   // 注册可处理项
   const _disposable = new Disposable()
   let _disposed = false
   const _proxyObj: Record<string | symbol, any> = {}
-  return class ProxyClass extends classes implements IProxyClass {
-    constructor(dependencies: Dependencies<IProxyClass>) {
+  class ProxyClass extends classes implements IProxyClass {
+    constructor(...args: any) {
+      const dependencies: Dependencies<IProxyClass> = args[0]
       // 预设key-value
       for (const dependencyName of registerDependencies) {
         if (dependencyName === name) continue
         _proxyObj[dependencyName] = undefined
       }
-
       const proxyObj = new Proxy(_proxyObj, {
         get(t, p, r) {
           const cache = Reflect.get(t, p, r)
@@ -93,6 +92,7 @@ function createProxyClass(name: DependencyName, classes: Dependency, registerDep
       _disposed = true
     }
   }
+  return ProxyClass
 }
 
 /** 容器类 */
@@ -131,7 +131,7 @@ export default abstract class Container implements IContainer {
     }
   }
   public abstract createChild(): any
-  public register(dependencies: Dependencies<Constructor<any>>, options?: RegisterDependenciesOptions): void {
+  public register(dependencies: Dependencies<Constructor>, options?: RegisterDependenciesOptions): void {
     if (!dependencies) throw new Error('dependencies must exist.')
 
     const normalizedDependencies = this._normalizeRegisterDependencies(dependencies, options)
@@ -161,17 +161,18 @@ export default abstract class Container implements IContainer {
     
     this.register({[dependencyName]: dependency}, options)
   } 
-  public instance<T = any>(entryClass: BuildEntry<T>): T {
-    if (!entryClass) throw new Error('entry class must exist.')
-    if (!isClass(entryClass)) throw new Error('entry class must is class.')
+  public instance<T>(target: Constructor<T>): T & IProxyClass {
+    if (!target) throw new Error('entry class must exist.')
+    if (!isClass(target)) throw new Error('entry class must is class.')
 
-    const ProxyClass = createProxyClass('', entryClass, this.registerDependenciesName)
+    const ProxyClass = createProxyClass('', target, this.registerDependenciesName)
     const instance = this._rawContainer.build(ProxyClass)
     this._entryInstances.push(instance)
-    return instance as T
+    return instance
   }
-  public resolve<T extends object>(dependencyName: string): T {
-    return this._rawContainer.resolve(dependencyName)
+  public resolve<T extends Record<string | symbol, any>, R = T & IProxyClass>(dependencyName: string): R {
+    const instance = this._rawContainer.resolve(dependencyName) as R
+    return instance
   }
   public reload() {
     if (!this._parentRawContainer) return
